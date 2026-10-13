@@ -1,0 +1,16 @@
+{
+  "python": "3.12.14",
+  "upstream_commit": "c3005b90686ea6dae9a69a293e7f6395eae77c9c",
+  "source_integrity": "verified",
+  "besiege_at_default_location": true,
+  "lua_mod_files_present": true,
+  "live_mod_activation_verified": false,
+  "live_simulation_verified": false,
+  "original_test": {
+    "level": "soft",
+    "gap_units": 5,
+    "duration_seconds": 17,
+    "height_threshold": 4,
+    "accumulated_hold_seconds": 2
+  }
+}

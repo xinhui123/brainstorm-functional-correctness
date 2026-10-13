@@ -1,0 +1,25 @@
+{
+  "repository": "https://github.com/AI4Science-WestlakeU/BuildArena",
+  "commit": "c3005b90686ea6dae9a69a293e7f6395eae77c9c",
+  "archive_sha256": "acf5ee0b76cceb480e3f7ece56406c6a171db08ae662c8972435c2206b11eb5d",
+  "license": "CC BY-NC 4.0; retained verbatim in BuildArena/LICENSE",
+  "files_sha256": {
+    "simulation/simulation_support.py": "5c596717391221d374d212379fecb3e562fc0b0b45921d16d69946ce92220a4b",
+    "analyze/sim_support.py": "9bdadbfd6ce68f45b36a379347cb46716c61ae9e9742f4107d193879b98f6bc8",
+    "analyze/sim_common.py": "5b519df2b9a2e0d77285dd0ffe616c88a8adae05bf9dd90a9ba844bd0cdcbc29",
+    "spatial/build.py": "57c48dacabc8ab2a42f8bfe778b4de4a0023cbc8fcb15dce812913c1dcfa3831",
+    "spatial/components.py": "0fd47f8b4a324895dde80df3172eb2f1d49cc2e3f084bb82d9801f2688eb73a5",
+    "spatial/utils.py": "ab5d04120f92356fa327390a08a1036252a155a98e6129a68a3ef07fb46dc681",
+    "asset/support_soft.blv": "cde05e8aa2332cc07d274c39917facb44d7d593a177c52ba63894ed5b5853b26",
+    "blocks/descriptors/torch.py": "dbe3b778faf3b0a8b33b4d39f50fd23d15f0023bf027142087131287614cb281",
+    "blocks/descriptors/water_cannon.py": "c6a3a9669a2a8bae7adc9993cc3f7ac17b1066ad16ac3dde2826449255ef8991",
+    "blocks/configs/ballast_.yaml": "4a9b157de6b559bfc5675d30da1210d67bfa71c1c033604040dd88495b149bb9",
+    "blocks/configs/brace.yaml": "5e42c0586d42c9f6dedc0b3268a2b0b9614c5634b5fadb2d4fa10b198a7a169e",
+    "blocks/configs/powered_wheel.yaml": "5ddbbfaf8be36bfd6ff18d747f5b84c281bc236d0b72e33f144b15c00616c32c",
+    "blocks/configs/small_wooden_block.yaml": "0f1e88b4e86f4c180aa428ab8cffd61d7989b0ab39ada217f8aa0dc00067936f",
+    "blocks/configs/starting_block.yaml": "d651bd704ba95f82a1ae5decdf9caca9bfdea14b44e7a44dc133b56a51961f4a",
+    "blocks/configs/torch.yaml": "3a6fbe9da0cd338ace644f714e96535fea932a9e9d8dbf5a27db77bca12c2838",
+    "blocks/configs/water_cannon.yaml": "bf7de84d100b58751d4ca2274123ae3a631c31e82e0f19afb55e32d083c7d19a",
+    "blocks/configs/winch.yaml": "d91114659d1694845f320b1863fbe9b4a8e8f692f0da89e5616674f2c33d85d8"
+  }
+}
