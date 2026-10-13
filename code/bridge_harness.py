@@ -58,6 +58,14 @@ def upstream_context(staging: Path):
     missing = object()
     old_modules = {name: sys.modules.get(name, missing)
                    for name in ("config", "simulation.operations")}
+    cache_settings = {
+        "MPLCONFIGDIR": ROOT / "artifacts" / ".cache" / "matplotlib",
+        "XDG_CACHE_HOME": ROOT / "artifacts" / ".cache",
+    }
+    old_environment = {key: os.environ.get(key) for key in cache_settings}
+    for key, directory in cache_settings.items():
+        directory.mkdir(parents=True, exist_ok=True)
+        os.environ[key] = str(directory)
     config = types.ModuleType("config")
     config.SavedMachines = str(staging)
     operations = types.ModuleType("simulation.operations")
@@ -84,6 +92,11 @@ def upstream_context(staging: Path):
                 sys.modules.pop(name, None)
             else:
                 sys.modules[name] = previous
+        for key, previous in old_environment.items():
+            if previous is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = previous
 
 
 def prepare(output: Path, machine_json: Path | None = None) -> dict:
@@ -137,6 +150,11 @@ def prepare(output: Path, machine_json: Path | None = None) -> dict:
         expected_csv = support.main(str(source_json), "soft")
         if len(captured) != 1:
             raise RuntimeError("Expected exactly one intercepted simulation request")
+        if machine_json is not None:
+            replay = json.loads((Path(captured[0]["output_dir"]) /
+                                 "research_bridge_fixture_sim.json").read_text())
+            if len(replay) != len(history):
+                raise ValueError("Upstream rejected part of the supplied operation history")
 
     level = staging / "research_support_soft.blv"
     shutil.copyfile(UPSTREAM / "asset" / "support_soft.blv", level)
@@ -161,7 +179,7 @@ def analyze(csv_path: Path, output: Path) -> dict:
     if output == csv_path or output.with_suffix(".clean.csv") == csv_path:
         raise ValueError("Do not overwrite the source telemetry")
     check_source()
-    records = {}
+    records = {}  # De-duplicate repeated clipboard captures, not rounded times.
     with csv_path.open(newline="") as stream:
         for number, row in enumerate(csv.reader(stream), 1):
             if len(row) < 2 or row[1].strip() != "ID_Ballast":
@@ -176,13 +194,10 @@ def analyze(csv_path: Path, output: Path) -> dict:
                 raise ValueError(f"Invalid numeric telemetry at line {number}")
             if len(row) == 3 and values[1] < 0:
                 raise ValueError("Negative ballast mass")
-            key = (values[0], len(row))
             numeric_row = (values[0], "ID_Ballast", *values[1:])
-            if key in records and records[key] != numeric_row:
-                raise ValueError(f"Conflicting ballast samples at time {values[0]}")
-            records[key] = numeric_row
-    positions = [row for (_, length), row in records.items() if length == 5]
-    weights = [row for (_, length), row in records.items() if length == 3]
+            records[numeric_row] = numeric_row
+    positions = [row for row in records.values() if len(row) == 5]
+    weights = [row for row in records.values() if len(row) == 3]
     if len(positions) < 2 or not weights:
         raise ValueError("Incomplete ballast telemetry: need position and mass samples")
     position_times = {row[0] for row in positions}

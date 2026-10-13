@@ -1,0 +1,31 @@
+test_duplicate_clipboard_rows_do_not_inflate_time (test_bridge_harness.HarnessTests.test_duplicate_clipboard_rows_do_not_inflate_time) ... ok
+test_early_collapse_fails (test_bridge_harness.HarnessTests.test_early_collapse_fails) ... ok
+test_legacy_score_can_pass_despite_later_collapse (test_bridge_harness.HarnessTests.test_legacy_score_can_pass_despite_later_collapse) ... ok
+test_mismatched_mass_and_position_coverage_rejected (test_bridge_harness.HarnessTests.test_mismatched_mass_and_position_coverage_rejected) ... ok
+test_missing_telemetry_is_infrastructure_error (test_bridge_harness.HarnessTests.test_missing_telemetry_is_infrastructure_error) ... ok
+test_nan_is_rejected (test_bridge_harness.HarnessTests.test_nan_is_rejected) ... ok
+test_preparation_embeds_original_load_protocol_without_running_game (test_bridge_harness.HarnessTests.test_preparation_embeds_original_load_protocol_without_running_game) ... /Users/xinhuikang/Downloads/research/baseline/BuildArena/spatial/build.py:1419: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/xinhuikang/Downloads/research/artifacts/tmpgaajha_0/prepared/support_soft_plumbing_20261013_000000/machine/research_bridge_fixture_sim/research_bridge_fixture_sim_full.json' mode='r' encoding='utf-8'>
+  self.operation_history_full = json.load(open(self.full_op_history_path, 'r', encoding='utf-8'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_rounded_upstream_timestamps_retain_distinct_samples (test_bridge_harness.HarnessTests.test_rounded_upstream_timestamps_retain_distinct_samples) ... ok
+test_supported_trace_passes (test_bridge_harness.HarnessTests.test_supported_trace_passes) ... ok
+test_unknown_machine_operation_rejected_before_preparation (test_bridge_harness.HarnessTests.test_unknown_machine_operation_rejected_before_preparation) ... ok
+test_unrealistic_initial_height_fails (test_bridge_harness.HarnessTests.test_unrealistic_initial_height_fails) ... ok
+test_boundary_orphan_recovered_from_prior_copy (test_record_bridge_clipboard.CaptureTests.test_boundary_orphan_recovered_from_prior_copy) ... ok
+test_late_tail_cannot_initialize_capture (test_record_bridge_clipboard.CaptureTests.test_late_tail_cannot_initialize_capture) ... ok
+test_missing_interior_window_blocks_scoring (test_record_bridge_clipboard.CaptureTests.test_missing_interior_window_blocks_scoring) ... ok
+test_overlapping_windows_recover_all_samples (test_record_bridge_clipboard.CaptureTests.test_overlapping_windows_recover_all_samples) ... ok
+test_restarted_clock_rejected (test_record_bridge_clipboard.CaptureTests.test_restarted_clock_rejected) ... ok
+test_unrelated_clipboard_content_is_not_retained (test_record_bridge_clipboard.CaptureTests.test_unrelated_clipboard_content_is_not_retained) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 6.424s
+
+OK
+machine saved as /Users/xinhuikang/Downloads/research/artifacts/tmpgaajha_0/prepared/support_soft_plumbing_20261013_000000/machine/research_bridge_fixture/research_bridge_fixture.bsg
+Length x: 0.0, Length z: 3.0
+Rotation: [0.0, 0.0, 0.0, 1.0]
+machine saved as /Users/xinhuikang/Downloads/research/artifacts/tmpgaajha_0/prepared/support_soft_plumbing_20261013_000000/simulation/research_bridge_fixture/research_bridge_fixture_sim.bsg
+Machine saved to /Users/xinhuikang/Downloads/research/artifacts/tmpgaajha_0/prepared/support_soft_plumbing_20261013_000000/simulation/research_bridge_fixture
+Machine copied to /Users/xinhuikang/Downloads/research/artifacts/tmpgaajha_0/prepared/game-staging

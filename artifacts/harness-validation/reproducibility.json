@@ -1,0 +1,9 @@
+{
+  "git": "no-git",
+  "sha256": {
+    "code/bridge_harness.py": "9d1540c529d7dedb63ced00c09529f5bdae2a2f34793ebb69dd60a40d8b6dac3",
+    "code/tests/test_bridge_harness.py": "b5475f348bad52e878dfa6e7c6ec01ffe87dfdfa65bab159f61ca8d7955357d7",
+    "baseline/buildarena-source.json": "806efba3b6e531b4ef8a57d4bd43be190069f2a14af9d882bbebd99d1ce16199",
+    "code/requirements-bridge.txt": "43ba636fc809053a5a3b960bb2a25a2e1ea5293a307a30879a3b844821a468f4"
+  }
+}

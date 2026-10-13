@@ -104,7 +104,8 @@ N is the number of eligible initially failed bridges; V is the frozen simulation
 - **2026-10-12:** User chose beginner mode, repair-agent direction, and load-bearing bridges; primary metric subsequently confirmed as RSR3.
 - **2026-10-13:** User approved the generic-revision comparison, small evidence-grounded monitor, deferred training, selective supervision as the central question, and paired observation conditions with the structured condition first.
 - **2026-10-13:** 本次立项已过 grill-me 闸门 + 人话闸门. The grill-me interview resolved direction, task category, primary metric, comparator, monitor/training scope, central question, and observation scope. Section 7 was rewritten using .claude/skills/eli5-idea/SKILL.md and stamped in this session.
-- **Current bottleneck:** simulator integration and experiment code are not ready; the pass verifier, model pair, failed-bridge source, and numerical budget remain to be selected.
+- **Current bottleneck:** offline preparation/scoring, live startup, and a copied/scored 4.52-second trace are confirmed; the later full-duration run reached mass 1500 but its exported tail omits the start. Complete rolling-log capture, the final pass verifier, model pair, failed-bridge source, and numerical budget remain open.
+- **2026-10-13:** User approved the existing BuildArena bridge test for harness validation. EXP-2026W42-001 passed offline checks. Subsequently EXP-2026W42-002 confirmed a brief live startup and visible Lua output; a copied 4.52-second partial trace scored as failure under the original rule; EXP-2026W42-003 reached the load ramp target but its end-only export was truncated; complete trace capture and all repair studies remain pending.
 - **Active issue:** DISC-2026W42-001 in Discussion.md. No repair experiment has run.
 - **Supporting notes:** ref/notes/heterogeneous-bridge-repair.md; ref/notes/buildarena-spatial-scaffolding.md.
 
@@ -146,4 +147,4 @@ The AIs do not have a carpenter's physical experience. An inspector can misunder
 ### 7.7 怎么算赢 & 现在卡在哪
 
 - **Winning:** among the same initially failed bridges, fix more within three repairs at the same total resource budget. For illustration only, fixing 12 of 20 is 60%; fixing 16 is 80%. We must check whether the inspector's decisions caused any improvement.
-- **Current obstacle:** simulator integration and experiment code are not ready; we still need to select the load-test rule, models, starting bridges, and spending limit. No repair results exist yet.
+- **Current obstacle:** file preparation, live logging, clipboard export, and scoring of a short trace are working. A later run reached full load, but the log window lost its early data. We need overlapping copies from one run, then select the final load-test rule, models, starting bridges, and spending limit. No repair results exist yet.

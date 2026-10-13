@@ -24,8 +24,15 @@ graph LR
     direction TB
     T_2026W42_001["❓ selective-supervision<br/>When should a small e…"]:::question
     T_2026W42_002["🔬 selective-supervision<br/>A small monitor with …"]:::hypothesis
+    T_2026W42_003["📊 bridge-harness<br/>Original bridge prepa…"]:::experiment
+    T_2026W42_004["📊 bridge-harness<br/>Brief live Besiege ru…"]:::experiment
+    T_2026W42_005["📝 bridge-harness<br/>Same startup run expo…"]:::note
+    T_2026W42_006["📊 bridge-harness<br/>End-only export loses…"]:::experiment
   end
   T_2026W42_001 --> T_2026W42_002
+  T_2026W42_003 --> T_2026W42_004
+  T_2026W42_004 --> T_2026W42_005
+  T_2026W42_005 --> T_2026W42_006
 ```
 <!-- TIMELINE:GRAPH:END -->
 
@@ -42,6 +49,10 @@ graph LR
 |---|---|---|---|---|---|---|
 | `T-2026W42-001` | 2026-10-13 | question | selective-supervision | When should a small evidence-grounded monitor intervene in bridge repair by a stronger designer? | `DISC-2026W42-001` | - |
 | `T-2026W42-002` | 2026-10-13 | hypothesis | selective-supervision | A small monitor with evidence checks and selective intervention can improve bridge recovery at matched inference cost; this remains untested. | `DISC-2026W42-001` | - |
+| `T-2026W42-003` | 2026-10-13 | experiment | bridge-harness | Original bridge preparation/scoring validated offline: 11 tests pass; live simulation still untested. | `EXP-2026W42-001`, `DISC-2026W42-001` | - |
+| `T-2026W42-004` | 2026-10-13 | experiment | bridge-harness | Brief live Besiege run produces ballast position/mass logs; complete trace export and scoring remain unverified. | `EXP-2026W42-002` | - |
+| `T-2026W42-005` | 2026-10-13 | note | bridge-harness | Same startup run exported and scored: 113 telemetry pairs over 4.52 s; legacy score fails; full 17 s run pending. | `EXP-2026W42-002` | - |
+| `T-2026W42-006` | 2026-10-13 | experiment | bridge-harness | End-only export loses first 13.60 s despite target load; overlapping recorder added, 17 tests pass; live capture pending. | `EXP-2026W42-003` | - |
 <!-- TIMELINE:TABLE:END -->
 
 ---

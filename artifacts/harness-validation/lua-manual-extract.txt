@@ -1,0 +1,2589 @@
+PAGE 1
+Mod Version: Mod Version: 
+1.2.0
+1.2.0
+Other Languages
+Other Languages
+Japanese (
+日本語
+)
+Thanks to 
+kudan
+ for the japanese translation!
+Lua Scripting Mod User Manual (EN)
+Lua Scripting Mod User Manual (EN)
+Table Of Contents
+Table Of Contents
+Introduction
+Useful Links
+What exactly does mod do?
+Quick Summary of the Mod
+Module System
+Lua Tables
+Rectangle
+Vector
+Quaternion
+Key Emulator
+Refs Controller
+Block Info
+Machine Info
+Raycast Hit
+Collider
+Line Renderer (WIP)
+Shape
+Player Info
+Level Entity
+Mod libraries
+Math
+Rectangle
+Graphical user interface
+Texture
+Vector
+Quaternion
+Machine
+Input
+Cursor
+Physics
+Players
+Lines
+Shapes
+Screen
+Chat
+Level Entitites
+Time
+Introduction
+Introduction
+This mod provides the ability to create and run Lua scripts in game without any compilation process with multiplayer support allowing you to create much more complex
+machines. Scripts can only control local player machine; they do not affect the level or other players machines in any way.
+Big thanks to the authors of 
+UniLua
+.
+Useful Links
+Useful Links
+Lua 5.2 Reference Manual.
+Unity – Manual: Order of execution for event functions.
+UnityEngine.GUI.
+Unity – Scripting API: Vector4.
+Unity – Scripting API: Quaternion.
+Unity – Scripting API: Rect.
+Unity – Scripting API: Input.
+Unity – Scripting API: Physics.
+What exactly does mod do?
+What exactly does mod do?
+When you load a machine or create a new one mod will automatically load it's LuaRoot files if it has any. Otherwise, it will create a new LuaRoot inside current
+machine.
+LuaRoot is a directory where all Lua files and folders are stored. You can access this directoruy by pressing 
+Open LuaRoot Folder
+ in mod menu.
+When you run the simulation mod will run the script 
+main.lua
+ and if everything started without critical errors mod will save LuaRoot into current machine.
+When you save your machine, LuaRoot will also be included into a save file. You also can save LuaRoot manually by pressing 
+Save LuaRoot manually
+.
+Machine script contains all base unity callbacks. There are short descriptions for all of them inside the default script file or down below.
+
+PAGE 2
+Quick Summary of the Mod
+Quick Summary of the Mod
+There are 5 main callbacks: 
+play
+, 
+update
+, 
+late_update
+, 
+fixed_update
+ and 
+on_gui
+. Each has its own purpose. See 
+Unity Scripting API
+ about them.
+play
+ called on simulation start. Mostly useless, but can be used for adding chat listeners.
+update
+ called each frame update. Used to get 
+player input
+.
+late_update
+ called after frame update.
+fixed_update
+ called fixed times per second. Used for physics and so. Put all your cool code here.
+on_gui
+ called only to draw 
+GUI
+ on screen.
+Key emulation is provided by 
+key emulator
+, it can be started, stopped or just clicked:
+local some_key_emulator = machine.new_key_emulator('c')
+some_key_emulator.start()
+some_key_emulator.stop()
+some_key_emulator.click()
+Slider values can be changed by creating a new 
+reference controller
+. Reference controller controls all blocks with same reference key.
+1
+. 
+Assign reference key to the block. In this case we are using wheels. So, don't forget to enable automatic mode as we are changing wheels speed, not forcing them
+to spin. Let's call them 
+rotor
+.
+2
+. 
+Find out mapper type key name of the slider you are changing. In our case it is called 
+speed
+.
+3
+. 
+Create a new 
+reference controller
+ and set the speed.
+local rotor = machine.get_refs_control('rotor')
+rotor.set_slider('speed', 0.5)
+Adjusting steering angles can be done by creating a new 
+reference controller
+ (or using existing) as shown above and setting desired angle.
+local hinge = machine.get_refs_control('hinge')
+hinge.set_steering(45)
+Block position, rotation, velocity and other information can be obtained by creating a new 
+block info
+.
+
+PAGE 3
+local machine_info = machine.get_machine_info()
+local starting_block = machine_info.get_block_info(0)
+local position = starting_block.position()
+It is also possible to get information about other players blocks and machines.
+for i = 0, players.count() - 1 do
+    local player = players.get(i)
+    if not player.is_local_player() and player.is_simulating() then
+        local enemy_position = players.get(i).get_machine_info().get_block_info(0).position()
+        print('enemy at height ' .. enemy_position.y)
+    end
+end
+Raycasting may be done using 
+physics
+.
+local raycast_start = vector.add(starting_block.position(), vector.multiply(starting_block.up(), -0.5))
+local raycast_direction = vector.multiply(starting_block.up(), -1)
+local raycast_hit = physics.raycast(raycast_start, raycast_direction)
+Near colliders can be found by using sphere overlapping using 
+physics
+.
+local colliders = physics.overlap_sphere(starting_block.position(), 5)
+for i in pairs(colliders) do
+    print(colliders[i].is_block)
+end
+Debug lines can be drawn using 
+lines
+ library.
+local line = lines.new_line_renderer()
+line.set_points(vector.new(0, 0, 0), vector.new(10, 10, 10))
+Chat messages can be handled by creating a new 
+chat listener
+. Don`t forget that you must add listener only after declaring callback function.
+local function on_chat(sender, text)
+    print(sender .. ' just said ' .. text)
+end
+chat.add_listener(on_chat)
+Write your own chat messages with rich text without any nickname prefix.
+chat.set_visible(true)
+chat.write_local('<color=\"red\">Only you can see this!</color>')
+chat.write_team('<color=\"red\">Only your team can see this!</color>')
+chat.write_global('<color=\"green\">Hello, everyone!</color>')
+I`ll be very happy to add new suggested features!
+Module System
+Module System
+In general module system allows you to use same script to control different parts of the machine separately.
+Example
+Example
+You can build one rocket and write one script, copy it many times and create new module with 
+rocket.lua
+ script attached for each rocket. Also you can find example
+machine at the workshop page of the mod.
+Usage
+Usage
+1
+. 
+Enable advanced building mode in setting tab at top right corner while in building mode.
+2
+. 
+Open Lua Scripting window by pressing 
+Ctrl
++
+L
+3
+. 
+Open LuaRoot folder by pressing 
+Open LuaRoot folder
+4
+. 
+Make a copy of your 
+main.lua
+ script and rename it if you want to.
+5
+. 
+Press 
+Modules
+ button to open Modules window.
+
+PAGE 4
+6
+. 
+Press 
+New
+ to create a new module.
+7
+. 
+Set name you want and enter script file name of script that that you created earlier.
+8
+. 
+Select translate blocks tool.
+9
+. 
+Press 
+Set blocks
+ near your module.
+10
+. 
+Now using selection (press left mouse button and drag) select all blocks that only be accessible in your module's script. 
+Other scripts cant reach these blocks even
+if they have same reference keys. You can check what blocks are under control of the module by pressing 
+Select
+ with translate blocks tool. Notice: starting
+block can be reached only by build index. So it cannot be selected.
+Lua Tables
+Lua Tables
+There is no such thing in this Lua interpreter used in mod as object-oriented programming, but there are tables! Tables allows to store values or even functions, so they are
+used as objects. However, remember: there are no references, only new tables every time (reference support WIP).
+Rectangle
+Rectangle
+Created by 
+rectangle library
+ using 
+rect.new(...)
+field
+field
+type
+type
+x
+x
+int
+y
+y
+int
+width
+width
+int
+height
+height
+int
+Vector
+Vector
+Created by 
+vector library
+ using 
+vector.new(...)
+field
+field
+type
+type
+x
+x
+number
+y
+y
+number
+z
+z
+number
+w
+w
+number
+Quaternion
+Quaternion
+Created by 
+quaternion library
+ using 
+quaternion.euler(...)
+field
+field
+type
+type
+x
+x
+number
+y
+y
+number
+z
+z
+number
+w
+w
+number
+Key Emulator
+Key Emulator
+Created by 
+machine
+ library using 
+machine.new_key_emulator(...)
+.
+field
+field
+type
+type
+start
+start
+function
+ (no args; 
+void
+)
+stop
+stop
+function
+ (no args; 
+void
+)
+click
+click
+function
+ (no args; 
+void
+)
+
+PAGE 5
+active
+active
+function
+ (no args; returns
+boolean
+)
+field
+field
+type
+type
+Refs Controller
+Refs Controller
+Created by 
+machine
+ library using 
+machine.get_refs_control(...)
+.
+field
+field
+type
+type
+set_slider
+set_slider
+function
+ (args: 
+string
+ mapper_key, 
+number
+ value; 
+void
+)
+set_steering
+set_steering
+function
+ (args: 
+number
+ angle; 
+void
+)
+Block Info
+Block Info
+Created by 
+machine info
+ using 
+machine_info.get_block_info(...)
+.
+field
+field
+type
+type
+position
+position
+function
+ (no args; returns 
+vector
+)
+forward
+forward
+function
+ (no args; returns 
+vector
+)
+right
+right
+function
+ (no args; returns 
+vector
+)
+up
+up
+function
+ (no args; returns 
+vector
+)
+rotation
+rotation
+function
+ (no args; returns 
+vector
+)
+being_vacuumed
+being_vacuumed
+function
+ (no args; returns
+boolean
+)
+id
+id
+function
+ (no args; returns 
+int
+)
+build_index
+build_index
+function
+ (no args; returns 
+int
+)
+health
+health
+function
+ (no args; returns 
+number
+)
+burning
+burning
+function
+ (no args; returns
+boolean
+)
+flipped
+flipped
+function
+ (no args; returns
+boolean
+)
+frozen
+frozen
+function
+ (no args; returns
+boolean
+)
+in_wind
+in_wind
+function
+ (no args; returns
+boolean
+)
+destroyed
+destroyed
+function
+ (no args; returns
+boolean
+)
+zero_g
+zero_g
+function
+ (no args; returns
+boolean
+)
+original_mass
+original_mass
+function
+ (no args; returns 
+number
+)
+scale
+scale
+function
+ (no args; returns 
+vector
+)
+velocity
+velocity
+function
+ (no args; returns 
+vector
+)
+angular_velocity
+angular_velocity
+function
+ (no args; returns 
+vector
+)
+Machine Info
+Machine Info
+
+PAGE 6
+Created by 
+machine
+ using 
+machine.get_machine_info(...)
+.
+field
+field
+type
+type
+get_block_info
+get_block_info
+ 
+(local machine only)
+function
+ (args: 
+string
+ ref_key, 
+int
+ index_of_all 
+(optional)
+; returns 
+block
+info
+)
+get_block_info
+get_block_info
+ 
+(both local and another player`s
+machine)
+function
+ (args: 
+int
+ build_index; returns 
+block info
+)
+block_count
+block_count
+function
+ (no args; returns 
+int
+)
+cluster_count
+cluster_count
+function
+ (no args; returns 
+int
+)
+center
+center
+function
+ (no args; returns 
+vector
+)
+mass
+mass
+function
+ (no args; returns 
+number
+)
+middle
+middle
+function
+ (no args; returns 
+vector
+)
+name
+name
+function
+ (no args; returns 
+string
+)
+player_id
+player_id
+function
+ (no args; returns 
+int
+)
+player
+player
+function
+ (no args; returns 
+player info
+)
+position
+position
+function
+ (no args; returns 
+vector
+)
+rotation
+rotation
+function
+ (no args; returns 
+vector
+)
+velocity
+velocity
+function
+ (no args; returns 
+vector
+)
+angular_velocity
+angular_velocity
+function
+ (no args; returns 
+vector
+)
+size
+size
+function
+ (no args; returns 
+vector
+)
+unbreakable
+unbreakable
+function
+ (no args; returns 
+boolean
+)
+infinite_ammo
+infinite_ammo
+function
+ (no args; returns 
+boolean
+)
+is_dragging_blocks
+is_dragging_blocks
+function
+ (no args; returns 
+boolean
+)
+team
+team
+function
+ (no args; returns 
+int
+)
+is_simulating
+is_simulating
+function
+ (no args; returns 
+boolean
+)
+Raycast Hit
+Raycast Hit
+Created by 
+physics
+ using 
+physics.raycast(...)
+.
+field
+field
+type
+type
+distance
+distance
+number
+point
+point
+vector
+normal
+normal
+vector
+is_block
+is_block
+boolean
+get_block_info
+get_block_info
+function
+ (no args; returns 
+block
+info
+)
+Collider
+Collider
+Created by 
+physics
+ using 
+physics.overlap_sphere(...)
+.
+
+PAGE 7
+field
+field
+type
+type
+is_block
+is_block
+boolean
+get_block_info
+get_block_info
+function
+ (no args; returns 
+block
+info
+)
+Line Renderer (WIP)
+Line Renderer (WIP)
+Created by 
+lines
+ library using 
+lines.new_line_renderer()
+.
+field
+field
+type
+type
+set_points
+set_points
+function
+ (
+vector
+ start, 
+vector
+ end; 
+void
+)
+set_width
+set_width
+function
+ (
+number
+ start_size, 
+number
+ end_size;
+void
+)
+set_color
+set_color
+function
+ (
+vector
+ color; 
+void
+)
+Shape
+Shape
+Created by 
+shapes
+ library using 
+shapes.new_...()
+.
+field
+field
+type
+type
+set_position
+set_position
+function
+ (
+vector
+ position; 
+void
+)
+set_rotation
+set_rotation
+function
+ (
+quaternion
+ rotation; 
+void
+)
+set_scale
+set_scale
+function
+ (
+vector
+ scale; 
+void
+)
+set_color
+set_color
+function
+ (
+vector
+ color; 
+void
+)
+Player Info
+Player Info
+Created by 
+players
+ library using 
+players.get(...)
+ and other.
+field
+field
+type
+type
+in_local_sim
+in_local_sim
+function
+ (no args; returns 
+boolean
+)
+is_host
+is_host
+function
+ (no args; 
+boolean
+)
+is_local_player
+is_local_player
+function
+ (no args; returns 
+boolean
+)
+is_spectator
+is_spectator
+function
+ (no args; returns 
+boolean
+)
+is_simulating
+is_simulating
+function
+ (no args; returns 
+boolean
+)
+name
+name
+function
+ (no args; returns 
+string
+)
+id
+id
+function
+ (no args; returns 
+int
+)
+team
+team
+function
+ (no args; returns 
+id
+)
+get_machine_info
+get_machine_info
+function
+ (no args; returns 
+machine
+info
+)
+Level Entity
+Level Entity
+Created by 
+entities
+ library using 
+entities.get(...)
+ and other.
+field
+field
+type
+type
+
+PAGE 8
+position
+position
+function
+ (no args; returns
+vector
+)
+rotation
+rotation
+function
+ (no args; returns
+vector
+)
+scale
+scale
+function
+ (no args; returns
+vector
+)
+velocity
+velocity
+function
+ (no args; returns
+vector
+)
+is_destroyed
+is_destroyed
+function
+ (no args; returns 
+bool
+)
+id
+id
+function
+ (no args; returns 
+int
+)
+name
+name
+function
+ (no args; returns
+string
+)
+category
+category
+function
+ (no args; returns
+string
+)
+team
+team
+function
+ (no args; returns 
+int
+)
+max_health
+max_health
+function
+ (no args; returns
+number
+)
+health
+health
+function
+ (no args; returns
+number
+)
+field
+field
+type
+type
+Mod libraries
+Mod libraries
+Warning! Every time when a function returns table it creates a 
+new
+new
+ table, not returns a reference to a table. It means that you shouldn't create big tables such as 
+block
+info
+ in 
+fixed_update
+ loop. Instead, create 
+block info
+ at the top of script or in the 
+play
+ callback. However, it isn't necessery, just be careful.
+Math
+Math
+math
+Math library.
+function
+function
+arguments
+arguments
+return values
+return values
+abs
+abs
+number
+ 
+x
+number
+acos
+acos
+number
+ 
+x
+number
+asin
+asin
+number
+ 
+x
+number
+atan2
+atan2
+number
+ 
+y, 
+number
+ 
+x
+number
+atan
+atan
+number
+ 
+x
+number
+ceil
+ceil
+number
+ 
+x
+number
+cosh
+cosh
+number
+ 
+x
+number
+cos
+cos
+number
+ 
+x
+number
+deg
+deg
+number
+ 
+x
+number
+exp
+exp
+number
+ 
+x
+number
+floor
+floor
+number
+ 
+x
+number
+
+PAGE 9
+fmod
+fmod
+number
+ 
+x, 
+number
+ 
+y
+number
+,
+frexp
+frexp
+number
+ 
+x
+number
+, 
+number
+ldexp
+ldexp
+number
+ 
+x, 
+number
+ 
+y
+number
+log10
+log10
+number
+ 
+x
+number
+log
+log
+number
+ 
+x, 
+number
+ base 
+(optional)
+number
+max
+max
+multiple 
+number
+ arguments
+number
+min
+min
+multiple 
+number
+ arguments
+number
+modf
+modf
+number
+ 
+x
+number
+, 
+number
+pow
+pow
+number
+ 
+x, 
+number
+ 
+y
+number
+rad
+rad
+number
+ 
+x
+number
+random
+random
+number
+random
+random
+number
+ 
+upper
+number
+random
+random
+number
+ 
+lower, 
+number
+ 
+upper
+number
+randomseed
+randomseed
+number
+ 
+seed
+void
+sinh
+sinh
+number
+ 
+x
+void
+sin
+sin
+number
+ 
+x
+number
+sqrt
+sqrt
+number
+ 
+x
+number
+tanh
+tanh
+number
+ 
+x
+number
+tan
+tan
+number
+ 
+x
+number
+lerp
+lerp
+number
+ 
+a, 
+number
+ 
+b, 
+number
+ 
+t
+number
+inverse_lerp
+inverse_lerp
+number
+ 
+a, 
+number
+ 
+b, 
+number
+ 
+t
+number
+lerp_unclamped
+lerp_unclamped
+number
+ 
+a, 
+number
+ 
+b, 
+number
+ 
+t
+number
+lerp_angle
+lerp_angle
+number
+ 
+a, 
+number
+ 
+b, 
+number
+ 
+t
+number
+clamp
+clamp
+number
+ 
+a, 
+number
+ 
+min, 
+number
+ max
+number
+clamp01
+clamp01
+number
+ 
+a
+number
+approximately
+approximately
+number
+ 
+a, 
+number
+ 
+b
+bool
+round
+round
+number
+ 
+x
+number
+closest_power_of_two
+closest_power_of_two
+number
+ 
+x
+number
+delta_angle
+delta_angle
+number
+ 
+a, 
+number
+ 
+b
+number
+gamma
+gamma
+number
+ 
+value, 
+number
+ 
+absmax, 
+number
+ gamma
+number
+gamma_to_linear_space
+gamma_to_linear_space
+number
+ 
+x
+number
+linear_to_gamma_space
+linear_to_gamma_space
+number
+ 
+x
+number
+move_towards
+move_towards
+number
+ current, 
+number
+ 
+target, 
+number
+ 
+max_delta
+number
+function
+function
+arguments
+arguments
+return values
+return values
+
+PAGE 10
+is_power_of_two
+is_power_of_two
+number
+ 
+x
+bool
+perlin_noise
+perlin_noise
+number
+ 
+x, 
+number
+ 
+y
+number
+ping_pong
+ping_pong
+number
+ 
+t, 
+number
+ 
+length
+number
+repeat
+repeat
+number
+ 
+t, 
+number
+ 
+length
+number
+sign
+sign
+number
+ 
+x
+number
+smoothstep
+smoothstep
+number
+ 
+from, 
+number
+ 
+to, 
+number
+ 
+t
+number
+function
+function
+arguments
+arguments
+return values
+return values
+Rectangle
+Rectangle
+rect
+Used by GUI library.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+new
+new
+int
+ x 
+(optional)
+, 
+int
+ y 
+(optional)
+, 
+int
+ width 
+(optional)
+, 
+int
+ height
+(optional)
+rectangle
+Texture
+Texture
+texture
+Used by GUI library.
+function
+function
+arguments
+arguments
+return values
+return values
+from_base64
+from_base64
+string
+ base64_image
+number
+ texture_ref
+Graphical user interface
+Graphical user interface
+gui
+GUI library based on 
+UnityEngine.GUI
+ class except for some functions where arguments were changed. See Unity Scripting API about GUI in 
+Useful Links
+.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+world_to_screen_point
+world_to_screen_point
+vector
+ world_position
+vector
+draw_texture
+draw_texture
+rectangle
+ position, 
+number
+ texture_ref
+rotate_around_point
+rotate_around_point
+number
+ angle, 
+vector
+ point
+scale_around_point
+scale_around_point
+vector
+ scale, 
+vector
+ point
+draw_texture
+draw_texture
+rectangle
+ position, 
+number
+ texture_ref
+label
+label
+rectangle
+ position, 
+string
+ text
+button
+button
+rectangle
+ position, 
+string
+ text
+boolean
+toggle
+toggle
+rectangle
+ position, 
+boolean
+ value, 
+string
+ text
+boolean
+begin_group
+begin_group
+rectangle
+ position
+begin_scroll_view
+begin_scroll_view
+rectangle
+ position, 
+vector
+ scroll_position, 
+rectangle
+ view_rect
+box
+box
+rectangle
+ position, 
+string
+ text
+
+PAGE 11
+bring_window_to_front
+bring_window_to_front
+int
+ window_id
+bring_window_to_back
+bring_window_to_back
+int
+ window_id
+drag_window
+drag_window
+end_group
+end_group
+end_scroll_view
+end_scroll_view
+focus_control
+focus_control
+string
+ name
+focus_window
+focus_window
+string
+ name
+get_name_of_focused_control
+get_name_of_focused_control
+string
+horizontal_scrollbar
+horizontal_scrollbar
+rectangle
+ position, 
+number
+ value, 
+number
+ size, 
+number
+ left_value, 
+number
+right_value
+number
+horizontal_slider
+horizontal_slider
+rectangle
+ position, 
+number
+ value, 
+number
+ left_value, 
+number
+ right_value
+number
+modal_window
+modal_window
+ 
+(arguments were
+changed)
+int
+ id, 
+rectangle
+ client
+rect, 
+string
+ text, _function
+ (args: 
+int
+ window_id; 
+void
+)
+rectangle
+password_field
+password_field
+rectangle
+ position, 
+string
+ password, 
+char
+ mask
+string
+repeat_button
+repeat_button
+rectangle
+ position, 
+string
+ text
+boolean
+scroll_to
+scroll_to
+rectangle
+ position
+selection_grid
+selection_grid
+rectangle
+ position, 
+int
+ selected, 
+string
+ array texts, 
+int
+ x_count
+int
+set_next_control_name
+set_next_control_name
+string
+ name
+text_area
+text_area
+rectangle
+ position, 
+string
+ text
+string
+text_field
+text_field
+rectangle
+ position, 
+string
+ text
+string
+unfocus_window
+unfocus_window
+vertical_scrollbar
+vertical_scrollbar
+rectangle
+ position, 
+number
+ value, 
+number
+ size, 
+number
+ top_value, 
+number
+buttom_value
+number
+vertical_slider
+vertical_slider
+rectangle
+ position, 
+number
+ value, 
+number
+ top_value, 
+number
+ buttom_value
+number
+window
+window
+ 
+(arguments are changed)
+int
+ window
+id, 
+rectangle
+ client_rect, 
+string
+ title, _function
+ (args: 
+int
+ window_id;
+void
+)
+rectangle
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+Vector
+Vector
+vector
+Basic Vector4 library based on 
+UnityEngine.Vector4
+. See Unity Scripting API about Vector4 in 
+Useful Links
+.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+new
+new
+number
+ w 
+(optional)
+, 
+number
+ y 
+(optional)
+, 
+number
+ z 
+(optional)
+, 
+number
+ w 
+(optional)
+vector
+distance
+distance
+vector
+ a, 
+vector
+ b
+number
+dot
+dot
+vector
+ a, 
+vector
+ b
+number
+lerp
+lerp
+vector
+ a, 
+vector
+ b, 
+number
+ t
+vector
+
+PAGE 12
+lerp_unclamped
+lerp_unclamped
+vector
+ a, 
+vector
+ b, 
+number
+ t
+vector
+magnitude
+magnitude
+vector
+ a
+number
+max
+max
+vector
+ lhs, 
+vector
+ rhs
+vector
+min
+min
+vector
+ lhs, 
+vector
+ rhs
+vector
+move_towards
+move_towards
+vector
+ current, 
+vector
+ target, 
+number
+ max_distance_delta
+vector
+normalize
+normalize
+vector
+ a
+vector
+project
+project
+vector
+ a, 
+vector
+ b
+vector
+scale
+scale
+vector
+ a, 
+vector
+ b
+vector
+add
+add
+vector
+ a, 
+vector
+ b
+vector
+subtract
+subtract
+vector
+ a, 
+vector
+ b
+vector
+negative
+negative
+vector
+ a
+vector
+multiply
+multiply
+vector
+ a, 
+number
+ b
+vector
+equals
+equals
+vector
+ a, 
+vector
+ b
+boolean
+angle
+angle
+vector
+ from, 
+vector
+ to
+number
+clamp_magnitude
+clamp_magnitude
+vector
+ a, 
+number
+ max_length
+vector
+cross
+cross
+vector
+ a, 
+vector
+ b
+vector
+project_on_plane
+project_on_plane
+vector
+ point, 
+vector
+ normal
+vector
+reflect
+reflect
+vector
+ in_direction, 
+vector
+ in_normal
+vector
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+Quaternion
+Quaternion
+quaternion
+Basic Quaternion library based on 
+UnityEngine.Quaternion
+. See Unity Scripting API about Quaternion in 
+Useful Links
+.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+new
+new
+number
+ w 
+(optional)
+, 
+number
+ y 
+(optional)
+, 
+number
+ z 
+(optional)
+quaternion
+new
+new
+vector
+ vector
+quaternion
+euler
+euler
+number
+ w 
+(optional)
+, 
+number
+ y 
+(optional)
+, 
+number
+ z 
+(optional)
+quaternion
+euler
+euler
+vector
+ vector
+quaternion
+angle
+angle
+quaternion
+ a, 
+quaternion
+ b
+number
+angle_axis
+angle_axis
+number
+ angle, 
+vector
+ axis
+quaternion
+dot
+dot
+quaternion
+ a, 
+quaternion
+ b
+number
+from_to_rotation
+from_to_rotation
+vector
+ from_rotation, 
+vector
+ to_direction
+quaternion
+inverse
+inverse
+quaternion
+ a
+quaternion
+lerp
+lerp
+quaternion
+ a, 
+quaternion
+ b, 
+number
+ t
+quaternion
+
+PAGE 13
+lerp_unclamped
+lerp_unclamped
+quaternion
+ a, 
+quaternion
+ b, 
+number
+ t
+quaternion
+slerp
+slerp
+quaternion
+ a, 
+quaternion
+ b, 
+number
+ t
+quaternion
+slerp_unclamped
+slerp_unclamped
+quaternion
+ a, 
+quaternion
+ b, 
+number
+ t
+quaternion
+look_rotation
+look_rotation
+vector
+ forward, 
+vector
+ upwards
+quaternion
+rotate_towards
+rotate_towards
+quaternion
+ from, 
+quaternion
+ to, 
+number
+max_degrees_delta
+quaternion
+multiply
+multiply
+quaternion
+ a, 
+quaternion
+ b
+quaternion
+multiply_on_vector
+multiply_on_vector
+quaternion
+ a, 
+vector
+ b
+vector
+equals
+equals
+quaternion
+ a, 
+quaternion
+ b
+boolean
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+Machine
+Machine
+machine
+Machine library for key emulation, steering and sliders controlling, machine info.
+function
+function
+arguments
+arguments
+return values
+return values
+new_key_emulator
+new_key_emulator
+string
+ key_code
+key emulator
+get_refs_control
+get_refs_control
+string
+ ref_key
+refs controller
+get_machine_info
+get_machine_info
+machine info
+Input
+Input
+input
+Library for handling direct input from keyboard, mouse, joysticks and other. See Unity Scripting API about Input in 
+Useful Links
+.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+mouse_screen_position
+mouse_screen_position
+vector
+mouse_raycast_hit_point
+mouse_raycast_hit_point
+vector
+mouse_raycast_hit
+mouse_raycast_hit
+raycast hit
+get_axis
+get_axis
+string
+ axis
+number
+get_axis_raw
+get_axis_raw
+string
+ axis
+number
+get_key
+get_key
+string
+ key_code
+boolean
+get_key_down
+get_key_down
+string
+ key_code
+boolean
+get_mouse_button
+get_mouse_button
+int
+ mouse_button
+boolean
+get_mouse_button_down
+get_mouse_button_down
+int
+ mouse_button
+boolean
+get_mouse_button_up
+get_mouse_button_up
+int
+ mouse_button
+boolean
+any_key
+any_key
+boolean
+any_key_down
+any_key_down
+boolean
+mouse_scroll_delta
+mouse_scroll_delta
+vector
+
+PAGE 14
+main_camera_position
+main_camera_position
+vector
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+Cursor
+Cursor
+cursor
+Library for controlling mouse cursor.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+set_state
+set_state
+boolean
+ state
+Physics
+Physics
+physics
+Library for obtaining information using physics. See Unity Scripting API about Physics in 
+Useful Links
+.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+raycast
+raycast
+vector
+ origin, 
+vector
+ direction
+raycast
+hit
+overlap_sphere
+overlap_sphere
+vector
+ origin, 
+number
+ radius, 
+int
+ layer_mask 
+(optional)
+collider
+array
+overlap_box
+overlap_box
+vector
+ center, 
+vector
+ half_extents, 
+quaternion
+ rotation 
+(optional)
+, 
+int
+ layer_mask 
+(optional)
+collider
+array
+overlap_capsule
+overlap_capsule
+vector
+ point0, 
+vector
+ point1, 
+number
+ radius, 
+int
+ layer_mask 
+(optional)
+collider
+array
+check_sphere
+check_sphere
+vector
+ origin, 
+number
+ radius, 
+int
+ layer_mask 
+(optional)
+bool
+check_box
+check_box
+vector
+ center, 
+vector
+ half_extents, 
+quaternion
+ rotation 
+(optional)
+, 
+int
+ layer_mask 
+(optional)
+bool
+check_capsule
+check_capsule
+vector
+ point0, 
+vector
+ point1, 
+number
+ radius, 
+int
+ layer_mask 
+(optional)
+bool
+sphere_cast
+sphere_cast
+vector
+ origin, 
+vector
+ direction, 
+number
+ radius, 
+number
+ max_distance, 
+int
+ layer_mask 
+(optional)
+bool
+box_cast
+box_cast
+vector
+ center, 
+vector
+ half_extents, 
+vector
+ direction, 
+number
+ max_distance, 
+quaternion
+ rotation 
+(optional)
+,
+int
+ layer_mask 
+(optional)
+bool
+capsule_cast
+capsule_cast
+vector
+ point0, 
+vector
+ point1, 
+number
+ radius, 
+vector
+ direction, 
+number
+ max_distance, 
+int
+ layer_mask
+(optional)
+bool
+line_cast
+line_cast
+vector
+ stard, 
+vector
+ end, 
+int
+ layer_mask 
+(optional)
+bool
+gravity
+gravity
+vector
+Players
+Players
+players
+Library for getting information about multiplayer session.
+function
+function
+arguments
+arguments
+return values
+return values
+count
+count
+int
+get
+get
+int
+ player_index
+player info
+by_id
+by_id
+int
+ network_id
+player info
+
+PAGE 15
+get_all
+get_all
+player info
+ array
+function
+function
+arguments
+arguments
+return values
+return values
+Lines
+Lines
+lines
+Library for drawing 3D debug lines (only for local client).
+function
+function
+arguments
+arguments
+return values
+return values
+new_line_renderer
+new_line_renderer
+line renderer
+Shapes
+Shapes
+shapes
+Library for drawing 3D debug shapes (only local client).
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+new_sphere
+new_sphere
+vector
+ position, 
+quaternion
+ rotation, 
+vector
+ scale, 
+vector
+color,
+shape
+new_capsule
+new_capsule
+vector
+ position, 
+quaternion
+ rotation, 
+vector
+ scale, 
+vector
+color,
+shape
+new_cylinder
+new_cylinder
+vector
+ position, 
+quaternion
+ rotation, 
+vector
+ scale, 
+vector
+color,
+shape
+new_cube
+new_cube
+vector
+ position, 
+quaternion
+ rotation, 
+vector
+ scale, 
+vector
+color,
+shape
+new_plane
+new_plane
+vector
+ position, 
+quaternion
+ rotation, 
+vector
+ scale, 
+vector
+color,
+shape
+new_quad
+new_quad
+vector
+ position, 
+quaternion
+ rotation, 
+vector
+ scale, 
+vector
+color,
+shape
+Screen
+Screen
+screen
+Library for getting screen information.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+width
+width
+number
+height
+height
+number
+fullscreen
+fullscreen
+boolean
+dpi
+dpi
+number
+Chat
+Chat
+chat
+Library for handling and writing chat messages.
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+add_listener
+add_listener
+function
+ (args: 
+string
+ sender, 
+string
+ text;
+void
+)
+
+PAGE 16
+set_visible
+set_visible
+boolean
+ state
+write_local
+write_local
+string
+ text
+write_team
+write_team
+string
+ text
+write_global
+write_global
+string
+ text
+clear
+clear
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+Level Entities
+Level Entities
+entities
+Library for getting information about level entities (works only with level editor and multiplayer).
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+count
+count
+int
+get_all
+get_all
+entity
+ array
+get_all_by_name
+get_all_by_name
+string
+ name
+entity
+ array
+get_all_by_id
+get_all_by_id
+int
+ id
+entity
+ array
+get_all_by_category
+get_all_by_category
+string
+ category
+entity
+ array
+get_all_in_sphere
+get_all_in_sphere
+vector
+ origin, 
+number
+ radius
+entity
+ array
+get_nearest
+get_nearest
+vector
+ origin
+entity
+get_nearest_alive
+get_nearest_alive
+vector
+ origin
+entity
+Time
+Time
+time
+function
+function
+arguments
+arguments
+return
+return
+values
+values
+time
+time
+number
+delta_time
+delta_time
+number
+fixed_delta_time
+fixed_delta_time
+number
+time_scale
+time_scale
+number
+Thanks for reading!

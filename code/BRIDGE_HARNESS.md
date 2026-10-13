@@ -23,13 +23,21 @@ The selected level has a five-unit gap. Upstream preprocessing adds a ballast pa
 
 The original score passes when accumulated sampled time at/above height 4 reaches two seconds and initial height is no greater than 20. This can pass despite a subsequent collapse. It is being reused for harness compatibility, not frozen as the final research verifier. The coordinate labels differ between game and user conventions; the scorer reads vertical height from CSV column four (1-based).
 
-The wrapper rejects missing, nonfinite, conflicting, or mismatched ballast position/mass data as infrastructure errors, preserving the raw log. For accepted logs, the original height/load calculations and Boolean criterion are unchanged. These input-integrity checks are an adapter change, not a repair-method improvement.
+The wrapper rejects missing, nonfinite, or mismatched ballast position/mass data as infrastructure errors, preserving the raw log. Repeated clipboard rows are deduplicated; distinct samples with equal timestamps are retained because the original Lua rounds time to one decimal at a higher sampling rate. For accepted logs, the original height/load calculations and Boolean criterion are unchanged. These input-integrity checks are an adapter change, not a repair-method improvement.
 
 ## Live test still required
 
 Prepared artifacts contain `game-staging/research_support_soft.blv` and `game-staging/research_bridge_fixture_sim.bsg`. After installation into the game's CustomLevels/SavedMachines directories, open the custom level in Besiege's Level Editor, load the fixture, enable the Lua Scripting Mod, and inspect its log panel. Preserve unsaved work before this manual test.
 
-Start simulation and capture the complete Lua output for the original 17-second window. Export/copy that text to a CSV in this workspace. Automatic GUI control and log collection are not yet validated on this Mac.
+The observed Lua Log window rolls over: a single end-of-run copy contained only 301 rows spanning the last six seconds, with one unpaired boundary entry. Copying once after 17 seconds is insufficient. Do not combine snippets from separate simulation runs or score a late tail as a complete evaluation.
+
+Use the clipboard recorder below, which saves only ballast telemetry while it runs. It ignores the clipboard initially present, requires the beginning of a fresh run, combines overlapping copies, and scores only after paired data cover at least 17 simulation seconds without a gap larger than 0.12 seconds and show the target mass of 1500 at/after second 17. These are capture-integrity requirements, not changes to the upstream physical score. Its rolling-buffer behavior is unit-tested; live clipboard polling remains to be validated.
+
+```bash
+.venv/bin/python code/record_bridge_clipboard.py
+```
+
+When the terminal prints READY, reload the fixture and start a fresh run at 100% speed. Click the black Log panel, press Command+A then Command+C every 2–3 seconds, staying in Besiege throughout. Stop after 17 seconds and make a final copy. Return to the terminal; CAPTURE COMPLETE means a full trace was saved and scored under the new timestamped artifacts/live-capture directory. An incomplete result retains collected data for diagnosis. Each recorder invocation is for one run; do not reset/restart a simulation while recording. Default recorder timeout is three minutes and Ctrl+C ends it early. It sends no game inputs and changes no physics or scripts. Automatic GUI control remains unvalidated on this Mac.
 
 ```bash
 .venv/bin/python code/bridge_harness.py analyze --csv path/to/live.csv --output artifacts/live-smoke/result.json

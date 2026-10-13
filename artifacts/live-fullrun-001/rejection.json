@@ -1,0 +1,7 @@
+{
+  "status": "infrastructure_error",
+  "error": "Position and mass timestamps do not match",
+  "complete_window": false,
+  "reason": "Pasted tail starts at 13.60 s; initial trajectory missing",
+  "legacy_pass": null
+}

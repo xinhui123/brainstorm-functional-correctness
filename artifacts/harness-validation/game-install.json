@@ -1,0 +1,14 @@
+{
+  "status": "assets_installed",
+  "game_launched": false,
+  "files": [
+    {
+      "path": "/Users/xinhuikang/Library/Application Support/Steam/steamapps/common/Besiege/Besiege.app/Contents/CustomLevels/research_support_soft.blv",
+      "sha256": "cde05e8aa2332cc07d274c39917facb44d7d593a177c52ba63894ed5b5853b26"
+    },
+    {
+      "path": "/Users/xinhuikang/Library/Application Support/Steam/steamapps/common/Besiege/Besiege.app/Contents/SavedMachines/research_bridge_fixture_sim.bsg",
+      "sha256": "d458320752ed4cf2343954f992a9e9315ca313b1e9b0025d53a01863f2f779f4"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+[
+  {
+    "op": "start",
+    "params": {
+      "init_shift": [
+        0,
+        0,
+        0
+      ],
+      "init_rotation": [
+        0,
+        0,
+        0
+      ],
+      "note": "Handwritten short-span plumbing fixture; not LLM output"
+    },
+    "result": "You have successfully added <ID 1: Starting Block>.\nExisting Blocks: 1\n(The starting block) <ID 1: Starting Block>\nPosition: [0.,0.,0.]\nAttachable Faces:\nFace label: A, Face center: [0.5, 0. , 0. ], Facing towards <East with 0.0\u00b0 pitch>\nFace label: B, Face center: [-0.5,  0. ,  0. ], Facing towards <West with 0.0\u00b0 pitch>\nFace label: C, Face center: [0. , 0. , 0.5], Facing towards <straight up>\nFace label: D, Face center: [ 0. ,  0. , -0.5], Facing towards <straight down>\nFace label: E, Face center: [0. , 0.5, 0. ], Facing towards <North with 0.0\u00b0 pitch>\nFace label: F, Face center: [ 0. , -0.5,  0. ], Facing towards <South with 0.0\u00b0 pitch>"
+  },
+  {
+    "op": "attach_block_to",
+    "params": {
+      "base_block": "1",
+      "face": "E",
+      "new_block": "Small Wooden Block",
+      "note": "plumbing fixture"
+    },
+    "result": "You have successfully added <ID 2: Small Wooden Block>.\nExisting Blocks: 2\n(plumbing fixture) <ID 2: Small Wooden Block>\nPosition: [0.,1.,0.]\nAttachable Faces:\nFace label: A, Face center: [0.5, 1. , 0. ], Facing towards <East with 0.0\u00b0 pitch>\nFace label: B, Face center: [-0.5,  1. ,  0. ], Facing towards <West with 0.0\u00b0 pitch>\nFace label: C, Face center: [0. , 1. , 0.5], Facing towards <straight up>\nFace label: D, Face center: [ 0. ,  1. , -0.5], Facing towards <straight down>\nFace label: E, Face center: [0. , 1.5, 0. ], Facing towards <North with 0.0\u00b0 pitch>"
+  },
+  {
+    "op": "attach_block_to",
+    "params": {
+      "base_block": "2",
+      "face": "E",
+      "new_block": "Small Wooden Block",
+      "note": "plumbing fixture"
+    },
+    "result": "You have successfully added <ID 3: Small Wooden Block>.\nExisting Blocks: 3\n(plumbing fixture) <ID 3: Small Wooden Block>\nPosition: [0.,2.,0.]\nAttachable Faces:\nFace label: A, Face center: [0.5, 2. , 0. ], Facing towards <East with 0.0\u00b0 pitch>\nFace label: B, Face center: [-0.5,  2. ,  0. ], Facing towards <West with 0.0\u00b0 pitch>\nFace label: C, Face center: [0. , 2. , 0.5], Facing towards <straight up>\nFace label: D, Face center: [ 0. ,  2. , -0.5], Facing towards <straight down>\nFace label: E, Face center: [0. , 2.5, 0. ], Facing towards <North with 0.0\u00b0 pitch>"
+  },
+  {
+    "op": "attach_block_to",
+    "params": {
+      "base_block": "3",
+      "face": "E",
+      "new_block": "Small Wooden Block",
+      "note": "plumbing fixture"
+    },
+    "result": "You have successfully added <ID 4: Small Wooden Block>.\nExisting Blocks: 4\n(plumbing fixture) <ID 4: Small Wooden Block>\nPosition: [0.,3.,0.]\nAttachable Faces:\nFace label: A, Face center: [0.5, 3. , 0. ], Facing towards <East with 0.0\u00b0 pitch>\nFace label: B, Face center: [-0.5,  3. ,  0. ], Facing towards <West with 0.0\u00b0 pitch>\nFace label: C, Face center: [0. , 3. , 0.5], Facing towards <straight up>\nFace label: D, Face center: [ 0. ,  3. , -0.5], Facing towards <straight down>\nFace label: E, Face center: [0. , 3.5, 0. ], Facing towards <North with 0.0\u00b0 pitch>"
+  }
+]

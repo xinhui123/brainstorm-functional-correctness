@@ -1,0 +1,19 @@
+{
+  "status": "scored",
+  "upstream_commit": "c3005b90686ea6dae9a69a293e7f6395eae77c9c",
+  "legacy_pass": false,
+  "input_csv": "/Users/xinhuikang/Downloads/research/artifacts/live-startup-001/ballast-raw.csv",
+  "input_sha256": "0d6f5376d84324fce42c2abaaf7f2cf04deb988d0e5266886888b86668b096ab",
+  "position_samples": 113,
+  "mass_samples": 113,
+  "metrics": {
+    "max_weight": 405.66,
+    "max_weight_at_threshold": 22.94,
+    "min_height": 0.6,
+    "hold_time_above_threshold": 0.6,
+    "time_below_threshold": 3.88,
+    "hacked": false,
+    "initial_height_above_threshold": false
+  },
+  "meaning": "Original BuildArena score; not a sustained fixed-load certificate"
+}

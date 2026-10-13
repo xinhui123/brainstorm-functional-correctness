@@ -1,0 +1,22 @@
+{
+  "status": "prepared_offline",
+  "upstream_commit": "c3005b90686ea6dae9a69a293e7f6395eae77c9c",
+  "fixture_kind": "handwritten_plumbing_only",
+  "simulation_executed": false,
+  "level": "soft",
+  "duration_seconds": 17,
+  "machine_bsg": "/Users/xinhuikang/Downloads/research/artifacts/bridge-preparation-001/game-staging/research_bridge_fixture_sim.bsg",
+  "custom_level": "/Users/xinhuikang/Downloads/research/artifacts/bridge-preparation-001/game-staging/research_support_soft.blv",
+  "expected_csv": "/Users/xinhuikang/Downloads/research/artifacts/bridge-preparation-001/support_soft_plumbing_20261013_000000/simulation/research_bridge_fixture/simulation_log_research_bridge_fixture_sim.csv",
+  "captured_request": {
+    "machine_name": "research_bridge_fixture_sim",
+    "output_dir": "/Users/xinhuikang/Downloads/research/artifacts/bridge-preparation-001/support_soft_plumbing_20261013_000000/simulation/research_bridge_fixture",
+    "duration": 17,
+    "set_ground": false
+  },
+  "artifact_sha256": {
+    "game-staging/research_bridge_fixture_sim.bsg": "d458320752ed4cf2343954f992a9e9315ca313b1e9b0025d53a01863f2f779f4",
+    "game-staging/research_support_soft.blv": "cde05e8aa2332cc07d274c39917facb44d7d593a177c52ba63894ed5b5853b26",
+    "support_soft_plumbing_20261013_000000/machine/research_bridge_fixture/research_bridge_fixture.json": "685e63ef3aa5f0586c70eae49bd333e53996735afd32b509b5e82ff0b7ddf852"
+  }
+}

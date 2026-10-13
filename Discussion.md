@@ -15,13 +15,13 @@
 | **发起人 (Owner)** | `PI @User` |
 | **开题时间 (Opened)** | `2026-10-13 11:36` |
 | **关联 idea/method** | `idea.md §2.3, §4.3`; method specification not yet frozen |
-| **关联实验** | None yet |
+| **关联实验** | `EXP-2026W42-001` (offline infrastructure validation) |
 
 ---
 
 ## Open Questions（待决清单）
 
-- [ ] Q1: Which executable bridge test and frozen pass criterion should the structured pilot use? (owner: `PI @User` + `Agent`, due: before the first repair run)
+- [ ] Q1: Existing BuildArena support test approved for harness validation; audit/freeze the final physical pass criterion before repair measurement. (owner: `PI @User` + `Agent`, due: before the first repair run)
 - [ ] Q2: What evidence, objection, abstention, and escalation rules define the selective monitor? (owner: `Agent`, due: before the mechanism comparison)
 - [ ] Q3: Which model pair, failed-bridge source, sample count, and numerical resource limits should be frozen? (owner: `PI @User` + `Agent`, due: before the first repair run)
 - [ ] Q4: How will the paired observation-grounded condition enforce access boundaries and distinguish perception from planning? (owner: `Agent`, due: before the paired evaluation)
@@ -36,7 +36,41 @@
 - Include the small evidence-grounded monitor; defer training.
 - Adopt paired structured-state and observation-grounded conditions; validate the structured loop first.
 
-No experiment has been run. Future Agent experiment posts must include a complete EXP reference and measured numbers. Source-review notes are in ref/notes/heterogeneous-bridge-repair.md and ref/notes/buildarena-spatial-scaffolding.md; they are not experimental evidence.
+At initial scope agreement, no live simulation or repair experiment had been run. Agent experiment posts include a complete EXP reference and measured numbers. Source-review notes are in ref/notes/heterogeneous-bridge-repair.md and ref/notes/buildarena-spatial-scaffolding.md; they are not experimental evidence.
+
+---
+
+【Agent】【2026-10-13】Offline harness validation: [EXP-2026W42-001](LOGS/2026-W42.md#exp-2026w42-001).
+
+- 11/11 unit checks passed; lint passed; one machine/level preparation and two installed game assets hash-verified.
+- Live simulations = 0; agent repair episodes = 0. This supports infrastructure readiness only.
+- Legacy scoring passes a synthetic late-collapse trace after accumulating two seconds above height four; this is not sustained-load certification. No scoring threshold was changed.
+- Next: capture a valid live trace with the installed level/fixture. No conclusion on selective-supervision effectiveness yet.
+
+---
+
+【Agent】【2026-10-13】Live startup check: [EXP-2026W42-002](LOGS/2026-W42.md#exp-2026w42-002).
+
+- One brief user-operated run produced visible ballast position and mass rows, reaching a visible timestamp of 4.32 seconds.
+- Complete traces exported/scored = 0; agent repair episodes = 0. Startup and Lua output are confirmed; physical success and supervision effectiveness remain unmeasured.
+- Next: validate clipboard export from the stopped run, then collect a fresh complete trace.
+
+---
+
+【Agent】【2026-10-13】Startup clipboard export scored: [EXP-2026W42-002 follow-up](LOGS/2026-W42.md#exp-2026w42-002-follow-up-pasted-startup-telemetry).
+
+- 113 matched position/mass pairs span 0.04–4.52 seconds at 25 Hz without timestamp gaps.
+- Original scorer returns failure for this partial trace: 0.60 seconds above height 4 versus 2.00 required; first sampled drop below 4 at 0.68 seconds.
+- Clipboard capture and adapter integration are confirmed. Complete 17-second traces = 0; repair episodes = 0. No supervisory effectiveness result or unique failure-cause diagnosis.
+
+---
+
+【Agent】【2026-10-13】Full-run export limitation: [EXP-2026W42-003](LOGS/2026-W42.md#exp-2026w42-003).
+
+- The user run reached 19.60 simulation seconds and target mass 1500, but its end-only clipboard export retains only the tail 13.60–19.60 seconds: 151 positions, 150 masses, one unmatched boundary timestamp.
+- Adapter correctly rejects the incomplete export; no full physical score or repair result. The late tail is below height 4 throughout, but missing early data prevent applying the legacy accumulated-hold score.
+- Added a task-filtered overlapping clipboard recorder; 17/17 unit checks and lint pass, live polling untested. Upstream physics/score unchanged.
+- CIRCLE-1 convergence plan for bridge-harness: one complete-capture check, then present the infrastructure outcome for a recorded user decision and move to verifier specification if supported. No research-scope change or issue closure.
 
 ---
 

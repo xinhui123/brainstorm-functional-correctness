@@ -1,0 +1,41 @@
+{
+  "raw_rows": 226,
+  "position_rows": 113,
+  "mass_rows": 113,
+  "first_time": 0.04,
+  "last_time": 4.52,
+  "min_step": 0.03999999999999915,
+  "max_step": 0.040000000000000036,
+  "first_position": [
+    0.04,
+    0.0,
+    9.02,
+    0.0
+  ],
+  "last_position": [
+    4.52,
+    -0.01,
+    1.86,
+    0.05
+  ],
+  "first_mass": [
+    0.04,
+    12.48
+  ],
+  "last_mass": [
+    4.52,
+    405.66
+  ],
+  "first_below_height_4": [
+    0.68,
+    0.0,
+    3.6,
+    0.0
+  ],
+  "first_below_height_2": [
+    0.76,
+    0.0,
+    1.98,
+    0.0
+  ]
+}

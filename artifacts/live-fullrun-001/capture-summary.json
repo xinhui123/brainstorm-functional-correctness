@@ -1,0 +1,19 @@
+{
+  "raw_rows": 301,
+  "position_samples": 151,
+  "mass_samples": 150,
+  "position_first_time": 13.6,
+  "position_last_time": 19.6,
+  "mass_first_time": 13.64,
+  "mass_last_time": 19.6,
+  "position_without_mass_times": [
+    13.6
+  ],
+  "mass_without_position_times": [],
+  "height_min": 1.45,
+  "height_max": 1.78,
+  "max_mass": 1500.0,
+  "mass_at_1500_samples": 103,
+  "capture_complete": false,
+  "reason": "Initial 0-13.60 s absent and earliest position has no paired mass"
+}

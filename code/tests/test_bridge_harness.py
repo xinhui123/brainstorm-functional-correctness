@@ -51,9 +51,12 @@ class HarnessTests(unittest.TestCase):
         duplicate = [[1, "ID_Ballast", 105], [1, "ID_Ballast", 0, 5, 0]]
         self.assertEqual(self.score([5, 5, 5], duplicate)["position_samples"], 3)
 
-    def test_conflicting_samples_rejected(self):
-        with self.assertRaisesRegex(ValueError, "Conflicting"):
-            self.score([5, 5, 5], [[1, "ID_Ballast", 0, 3, 0]])
+    def test_rounded_upstream_timestamps_retain_distinct_samples(self):
+        extra = [[1, "ID_Ballast", 110], [1, "ID_Ballast", 0, 4.9, 0]]
+        result = self.score([5, 5, 5], extra)
+        self.assertEqual(result["position_samples"], 4)
+        self.assertEqual(result["mass_samples"], 4)
+        self.assertEqual(result["metrics"]["hold_time_above_threshold"], 2)
 
     def test_missing_telemetry_is_infrastructure_error(self):
         raw = self.path / "empty.csv"
@@ -64,6 +67,17 @@ class HarnessTests(unittest.TestCase):
     def test_nan_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "Invalid numeric"):
             self.score([5, float("nan"), 5])
+
+    def test_mismatched_mass_and_position_coverage_rejected(self):
+        with self.assertRaisesRegex(ValueError, "timestamps do not match"):
+            self.score([5, 5, 5], [[3, "ID_Ballast", 0, 5, 0]])
+
+    def test_unknown_machine_operation_rejected_before_preparation(self):
+        source = self.path / "unsafe.json"
+        source.write_text('[{"op":"unrecognized","params":{}}]')
+        with self.assertRaisesRegex(ValueError, "Unsupported"):
+            prepare(self.path / "prepared", source)
+        self.assertFalse((self.path / "prepared").exists())
 
     def test_preparation_embeds_original_load_protocol_without_running_game(self):
         result = prepare(self.path / "prepared")
